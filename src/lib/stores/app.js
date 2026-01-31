@@ -1,10 +1,18 @@
 import { readable, writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { PUBLIC_EXPLORE_URL, PUBLIC_FEATURE_FLAGS } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
-console.log('PUBLIC_FEATURE_FLAGS', JSON.parse(PUBLIC_FEATURE_FLAGS));
+let parsedFeatureFlagsValue = {};
+try {
+	parsedFeatureFlagsValue = env.PUBLIC_FEATURE_FLAGS ? JSON.parse(env.PUBLIC_FEATURE_FLAGS) : {};
+} catch (error) {
+	console.warn('Invalid PUBLIC_FEATURE_FLAGS, falling back to empty object.', error);
+	parsedFeatureFlagsValue = {};
+}
 
-export const parsedFeatureFlags = PUBLIC_FEATURE_FLAGS ? JSON.parse(PUBLIC_FEATURE_FLAGS) : {};
+console.log('PUBLIC_FEATURE_FLAGS', parsedFeatureFlagsValue);
+
+export const parsedFeatureFlags = parsedFeatureFlagsValue;
 /** @type {import('svelte/store').Readable<*>} */
 export const featureFlags = readable(parsedFeatureFlags);
 
@@ -37,7 +45,7 @@ function toLocalStorage(store, storageKey) {
 }
 
 /** @type {import('svelte/store').Readable<string>} */
-export const dataTrackerLink = readable(PUBLIC_EXPLORE_URL);
+export const dataTrackerLink = readable(env.PUBLIC_EXPLORE_URL ?? 'https://explore.openelectricity.org.au');
 
 export const bannerOpen = writable(fromLocalStorage('bannerOpen', true));
 toLocalStorage(bannerOpen, 'bannerOpen');

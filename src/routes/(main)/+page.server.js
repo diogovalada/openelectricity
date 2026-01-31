@@ -2,6 +2,15 @@ import { client } from '$lib/sanity';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch }) {
+	if (!client) {
+		return {
+			homepageData: [],
+			articles: [],
+			flows: null,
+			prices: null
+		};
+	}
+
 	const homepageData = await client.fetch(
 		`*[_type == "homepage"]{_id, banner_title, banner_statement, milestones_title, map_title, records_title, analysis_title, goals_title, goals}`
 	);

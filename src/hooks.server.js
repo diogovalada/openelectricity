@@ -1,14 +1,21 @@
 import { building } from '$app/environment';
-import { ARTICLE_LOGIN } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export const handle = async ({ event, resolve }) => {
 	let url = new URL(event.request.url);
 
 	if (url.pathname.startsWith('/article-drafts')) {
+		const articleLogin = env.ARTICLE_LOGIN;
+
+		// Draft routes are opt-in (require env config). If not configured, hide them.
+		if (!articleLogin) {
+			return new Response('Not found', { status: 404 });
+		}
+
 		const auth = event.request.headers.get('Authorization');
 
-		if (auth !== `Basic ${btoa(ARTICLE_LOGIN)}`) {
+		if (auth !== `Basic ${btoa(articleLogin)}`) {
 			return new Response('Not authorized', {
 				status: 401,
 				headers: {

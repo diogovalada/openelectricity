@@ -49,7 +49,7 @@
 	});
 
 	// const milestones = articles.filter((article) => article.article_type === 'milestone');
-	const analysisArticles = articles
+	const analysisArticles = (articles ?? [])
 		.filter((article) => article.article_type === 'analysis')
 		.slice(0, 6);
 
@@ -61,11 +61,13 @@
 		outlookEnergyNem = ispData.aemo2024.outlookEnergyNem;
 	}, 250);
 
-	if (!homepageData || homepageData.length === 0) {
-		throw new Error('No homepage data found');
-	}
-
-	const { banner_title, banner_statement, map_title, analysis_title } = homepageData[0];
+	const { banner_title, banner_statement, map_title, analysis_title } =
+		homepageData?.[0] ?? {
+			banner_title: '',
+			banner_statement: '',
+			map_title: '',
+			analysis_title: ''
+		};
 
 	let selectedRecordRegion = $state('');
 	let selectedRegions = $derived(selectedRecordRegion ? [selectedRecordRegion] : []);
