@@ -2,6 +2,7 @@
 	"name": "open-electriciy-web",
 	"version": "3.14.2",
 	"private": true,
+	"packageManager": "pnpm@10.22.0",
 	"engines": {
 		"node": ">=v22.12.0"
 	},
