@@ -1,8 +1,14 @@
-import { PUBLIC_EMBER_BRIDGE_API } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 export async function load({ fetch }) {
+	const baseUrl = env.PUBLIC_EMBER_BRIDGE_API;
+
+	if (!baseUrl) {
+		return { countries: [], error: 'Ember Bridge API not configured' };
+	}
+
 	try {
-		const response = await fetch(`${PUBLIC_EMBER_BRIDGE_API}/api/countries`);
+		const response = await fetch(`${baseUrl}/api/countries`);
 		if (!response.ok) {
 			throw new Error(`HTTP error: ${response.status}`);
 		}
@@ -11,6 +17,6 @@ export async function load({ fetch }) {
 		return { countries };
 	} catch (error) {
 		console.error(error);
-		return { error: 'Unable to fetch countries' };
+		return { countries: [], error: 'Unable to fetch countries' };
 	}
 }
