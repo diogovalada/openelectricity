@@ -40,7 +40,7 @@ Note:
 - "Memorize" convention
   - If I directly tell you to "memorize" something (e.g. "memorize this", "can you memorize ..."), treat it as a request to persist that information by updating the appropriate section below and/or linked docs. Do not treat "memorize" as a persistence request when I'm talking about myself (e.g. "I need to memorize ...").
 - "Normalize working tree"
-  - If I ask you to “normalize Working Tree”, I mean: make the repository’s working tree clean by staging and committing the current changes. Split into multiple commits when it reduces risk or makes review/merge easier (e.g. separate refactors from behavior changes), but avoid unnecessary churn.
+  - If I ask you to “normalize Working Tree”, I mean: make the repository’s working tree clean by staging and committing the current changes. Split into multiple commits when it reduces risk or makes review/merge easier (e.g. separate refactors from behavior changes), but avoid unnecessary churn. Don't forget to, for each commit, also update the "Agent notes" described below if applicable.
 
 ## Agent notes (keep up to date)
 
