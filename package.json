@@ -66,5 +66,11 @@
 		"vite": "^5.4.17",
 		"vitest": "^2.1.9"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"d3-color": "^3.1.0",
+		"d3-format": "^3.1.0",
+		"d3-scale": "^4.0.2",
+		"d3-shape": "^3.2.0"
+	}
 }

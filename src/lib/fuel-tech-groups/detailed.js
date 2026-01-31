@@ -44,7 +44,10 @@ const fuelTechMap = {
 	wind_offshore: ['wind_offshore'],
 	// solar_thermal: ['solar_thermal'],
 	solar_utility: ['solar_utility'],
-	solar_rooftop: ['solar_rooftop']
+	solar_rooftop: ['solar_rooftop'],
+
+	curtailment_solar_utility: ['curtailment_solar_utility'],
+	curtailment_wind: ['curtailment_wind']
 };
 
 /** @type {Object.<FuelTechCode, string>}} */
@@ -87,7 +90,10 @@ const labels = {
 	wind_offshore: 'Wind (Offshore)',
 
 	solar_utility: 'Solar (Utility)',
-	solar_rooftop: 'Solar (Rooftop)'
+	solar_rooftop: 'Solar (Rooftop)',
+
+	curtailment_solar_utility: 'Curtailment (Solar Utility)',
+	curtailment_wind: 'Curtailment (Wind)'
 };
 
 /** @type {FuelTechCode[]} */
@@ -131,7 +137,10 @@ const order = [
 	'wind_offshore',
 
 	'solar_utility',
-	'solar_rooftop'
+	'solar_rooftop',
+
+	'curtailment_solar_utility',
+	'curtailment_wind'
 ];
 
 // REDUCERS

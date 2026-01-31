@@ -3,7 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import { fuelTechColour, colourReducer } from '$lib/stores/theme';
 	import { fuelTechName } from '$lib/fuel_techs.js';
-	import { dataTrackerLink } from '$lib/stores/app';
 	import StackedAreaLineChartWithContext from '$lib/components/charts/StackedAreaLineChartWithContext.svelte';
 	import ChartTooltipWithContext from '$lib/components/charts/ChartTooltipWithContext.svelte';
 	import nighttimes from '$lib/utils/nighttimes';
@@ -150,7 +149,7 @@
 				{/each}
 			</dl>
 			<a
-				href={$dataTrackerLink}
+				href="/tracker"
 				class="text-base mt-12 md:mt-0 block text-center rounded-xl font-space border border-black border-solid p-6 transition-all text-white bg-black hover:bg-dark-grey hover:no-underline"
 			>
 				View tracker
