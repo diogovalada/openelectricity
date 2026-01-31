@@ -1,13 +1,17 @@
 import { error } from '@sveltejs/kit';
 import { OpenElectricityClient } from 'openelectricity';
-import { PUBLIC_OE_API_KEY, PUBLIC_OE_API_URL } from '$env/static/public';
-
-let client = new OpenElectricityClient({
-	apiKey: PUBLIC_OE_API_KEY,
-	baseUrl: PUBLIC_OE_API_URL
-});
+import { env } from '$env/dynamic/public';
 
 export async function GET({ url, setHeaders }) {
+	if (!env.PUBLIC_OE_API_KEY || !env.PUBLIC_OE_API_URL) {
+		return error(501, 'OpenElectricity API not configured');
+	}
+
+	const client = new OpenElectricityClient({
+		apiKey: env.PUBLIC_OE_API_KEY,
+		baseUrl: env.PUBLIC_OE_API_URL
+	});
+
 	let { searchParams } = url;
 	let dataType = /** @type {'market' | 'network' | undefined} */ (searchParams.get('dataType'));
 	let networkId = /** @type {import('openelectricity').NetworkCode | undefined} */ (

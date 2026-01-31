@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { PUBLIC_JSON_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
-const basePath = PUBLIC_JSON_URL + '/models/v2';
+const FALLBACK_JSON_URL = 'https://data.openelectricity.org.au';
+const basePath = (env.PUBLIC_JSON_URL || FALLBACK_JSON_URL) + '/models/v2';
 
 /** @type {*} */
 const modelPaths = {

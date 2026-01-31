@@ -1,10 +1,16 @@
-import { PUBLIC_RECORDS_API, PUBLIC_API_KEY } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 export async function GET({ params, url, fetch, setHeaders }) {
 	setHeaders({
-		'cache-control': 'max-age=0',
-		Authorization: `Bearer ${PUBLIC_API_KEY}`
+		'cache-control': 'max-age=0'
 	});
+
+	if (!env.PUBLIC_RECORDS_API) {
+		return Response.json(
+			{ error: 'Records API not configured (missing PUBLIC_RECORDS_API).' },
+			{ status: 501 }
+		);
+	}
 
 	const { searchParams } = url;
 	const recordId = params.id;
@@ -20,11 +26,12 @@ export async function GET({ params, url, fetch, setHeaders }) {
 		pageParams = `${pageParams}&limit=${pageSize}`;
 	}
 
-	const path = `${PUBLIC_RECORDS_API}/history/${recordId}?${pageParams}`;
+	const path = `${env.PUBLIC_RECORDS_API}/history/${recordId}?${pageParams}`;
 
 	console.log('path', path);
 
-	const response = await fetch(path);
+	const headers = env.PUBLIC_API_KEY ? { Authorization: `Bearer ${env.PUBLIC_API_KEY}` } : undefined;
+	const response = await fetch(path, { headers });
 	if (response.ok) {
 		const data = await response.json();
 		return Response.json(data);

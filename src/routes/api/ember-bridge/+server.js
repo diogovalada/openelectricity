@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { PUBLIC_EMBER_BRIDGE_API } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 export async function GET({ fetch, url }) {
 	// /v4/ember/AUS/monthly.json
@@ -8,7 +8,14 @@ export async function GET({ fetch, url }) {
 	const region = searchParams.get('region') || 'x-WRD';
 	const range = searchParams.get('range') || 'yearly'; // yearly, monthly
 
-	const dataPath = `${PUBLIC_EMBER_BRIDGE_API}/v4/ember/${region}/${range}.json`;
+	if (!env.PUBLIC_EMBER_BRIDGE_API) {
+		return Response.json(
+			{ error: 'Ember Bridge API not configured (missing PUBLIC_EMBER_BRIDGE_API).' },
+			{ status: 501 }
+		);
+	}
+
+	const dataPath = `${env.PUBLIC_EMBER_BRIDGE_API}/v4/ember/${region}/${range}.json`;
 	console.log('/api/ember-bridge/', dataPath);
 
 	const res = await fetch(dataPath);

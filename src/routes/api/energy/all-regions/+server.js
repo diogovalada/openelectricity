@@ -1,5 +1,7 @@
 import { error } from '@sveltejs/kit';
-import { PUBLIC_JSON_API } from '$env/static/public';
+import { env } from '$env/dynamic/public';
+
+const FALLBACK_JSON_API = 'https://data.openelectricity.org.au/v4/stats';
 
 export async function GET({ fetch, url, setHeaders }) {
 	setHeaders({
@@ -27,8 +29,9 @@ export async function GET({ fetch, url, setHeaders }) {
 	const type = searchParams.get('type') || 'energy';
 
 	const regions = ['NSW1', 'QLD1', 'VIC1', 'SA1', 'TAS1'];
+	const baseUrl = env.PUBLIC_JSON_API || FALLBACK_JSON_API;
 	const dataPaths = regions.map(
-		(region) => `${PUBLIC_JSON_API}/${country}/${network}/${region}/${type}/all.json`
+		(region) => `${baseUrl}/${country}/${network}/${region}/${type}/all.json`
 	);
 
 	console.log('api/energy/all-regions', dataPaths);

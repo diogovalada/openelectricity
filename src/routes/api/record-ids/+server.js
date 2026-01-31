@@ -1,9 +1,14 @@
-import { PUBLIC_RECORDS_API, PUBLIC_API_KEY } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 export async function GET({ url, fetch, setHeaders }) {
-	setHeaders({
-		Authorization: `Bearer ${PUBLIC_API_KEY}`
-	});
+	setHeaders({});
+
+	if (!env.PUBLIC_RECORDS_API) {
+		return Response.json(
+			{ error: 'Records API not configured (missing PUBLIC_RECORDS_API).' },
+			{ status: 501 }
+		);
+	}
 
 	// const date = url.searchParams.get('date');
 	const { searchParams } = url;
@@ -141,10 +146,11 @@ export async function GET({ url, fetch, setHeaders }) {
 	// ];
 	// const fuelTechs = [];
 	// const fuelTechParams = fuelTechs.map((tech) => `&fuel_tech=${tech}`).join('');
-	const path = `${PUBLIC_RECORDS_API}/record_id?${fuelTechParams}${metricParams}${aggregateParams}${dateParams}${pageParams}${regionParams}${periodParms}${recordIdFilterParams}${significanceParams}`;
+	const path = `${env.PUBLIC_RECORDS_API}/record_id?${fuelTechParams}${metricParams}${aggregateParams}${dateParams}${pageParams}${regionParams}${periodParms}${recordIdFilterParams}${significanceParams}`;
 
 	console.log('record_id path', path);
-	const response = await fetch(path);
+	const headers = env.PUBLIC_API_KEY ? { Authorization: `Bearer ${env.PUBLIC_API_KEY}` } : undefined;
+	const response = await fetch(path, { headers });
 
 	if (response.ok) {
 		const data = await response.json();
