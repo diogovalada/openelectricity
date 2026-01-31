@@ -6,18 +6,25 @@ A overview of this project is in `CLAUDE.md`. This was already a document from t
 
 - This is a fork of https://github.com/opennem/openelectricity; keep changes minimal and avoid unnecessary churn to reduce future merge conflicts.
 
-Whenever you need to make changes due to having to adapt for the different reality of our project/country/etc, strive to do it by making the frontend more programmatic. Kind of like a prioritize a Modular, Data-Driven Toolkit architecture (or “Configuration-Driven Dashboard”??) over hard-coded solutions” for things like the Tracker page. Maybe modular Toolkit is the best expression, since maybe we don’t want to turn it into a rigid framework, but rather keep it a flexible toolkit where the UI adapts to the data provided?). In a way that is modular and extensible. E.g. allow users making forks to easily adapt to their own reality (e.g. different countries grids, etc) by allowing them to easily specify the resolutions they want, the source type names, etc. 
+When we need to diverge from upstream (different country/market/data reality), prefer making the frontend **more configuration-driven** rather than sprinkling hard-coded assumptions across pages/components. The goal is a *toolkit*, not a rigid framework: the UI should adapt to the data/config it’s given.
 
-Examples:
-Configuration-Driven: Abstract all market-specific constants (fuel types, colors, data resolutions, unit types) into a central config file or state.
-Generic Components: UI components (charts, legends, tables) must be 'dumb' and programmatic. They should loop through configuration arrays rather than looking for hard-coded names like 'Coal' or 'Solar'.
-Low Coupling: Ensure modules (like the Tracker page or the Charting engine) are independent. A user should be able to swap or remove one module without the entire system breaking.
-Extensibility: Use standard interfaces for data fetching so that new API sources can be plugged in easily.
-Whenever the guidance above impacts your decisions, don’t forget to state that.
+Guiding principles (use judgment; these are preferences, not absolute rules):
+- **Configuration-driven:** Put market-specific constants (fuel techs, colours, units, time resolutions, region lists, labels) behind a config layer rather than hard-coding strings like “Coal”, “NEM”, etc.
+- **Dumb/presentational UI:** Prefer “dumb” components (charts, legends, tables) that render what they’re passed; keep market/business rules in a small number of “container” modules.
+- **Low coupling:** Keep modules (e.g. Tracker, charting, scenarios) swappable where practical; avoid hidden cross-dependencies.
+- **Extensible data access:** Prefer stable interfaces for data fetching/adaptation so new backends or response shapes can be plugged in with minimal UI churn.
 
-My expectation is that modularity will allow to minimize merge conflicts in the future. Maybe it could be a good strategy to implement our new logic in new files? 
+Default pattern (to reduce reinvention):
+- Prefer adding fork-only logic in new files (adapters/config) rather than rewriting upstream code, when that meaningfully reduces conflict risk.
+- Suggested locations:
+  - `src/lib/market/` for market config + adapters (e.g. `marketConfig`, `marketApi`).
+  - Keep fork-specific, high-churn differences isolated and documented (link from `docs/FORK_NOTES.md` / ADRs as appropriate).
 
-But of course, feel free to temper this strategy when common sense requires. And also it's mostly for when changes that break a bit with the upstream project paradigm are necessary.
+Don’t over-engineer:
+- If a change is truly one-off and unlikely to vary by market, keep it simple.
+- If you see repetition or “market names in code”, that’s a good trigger to extract into config/adapters.
+
+When this guidance materially affects a decision, mention it briefly in the PR description and/or Diary/ADR (as appropriate).
 
 Note:
   - The `opennem-fe` folder in the parent folder to this repo, contains my fork (https://github.com/diogovalada/opennem-fe) of the old frontend project https://github.com/opennem/opennem-fe (which will be deprecated as they are moving to the new frontend in `opennem/openelectricity`). In my fork, I already started adapting the project for my use case, but I also want to migrate to the svelte version, and that's what we are doing in this repo.
